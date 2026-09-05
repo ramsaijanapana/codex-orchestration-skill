@@ -11,7 +11,7 @@ Keep the root focused on architecture, ambiguity, scheduling, contract decisions
 
 Read repository instructions and current checkout state. Define the requested outcome, acceptance invariants, authoritative base revision, user changes to preserve, and authorized external actions. This skill does not grant deployment or publication permission.
 
-Check available delegation tools, supported models and reasoning efforts, isolation facilities, and concurrency limits. The model table below is a preferred profile, not a promise of availability. Do not pretend to switch the running root model. When a requested profile is unavailable, state the substitution and preserve its role. Without delegation, perform the same stages sequentially and report that limitation.
+Check available delegation tools, supported models and reasoning efforts, isolation facilities, and concurrency limits. The model table below is a preferred profile, not a promise of availability. Do not pretend to switch the running root model. When a requested profile is unavailable, state the substitution and preserve its role. Without delegation, implement and self-check sequentially, then deliver the candidate and evidence with independent review/verification explicitly outstanding. Self-review cannot satisfy the independent certification stages below.
 
 For a complex batch, start two read-heavy scouts before most writers:
 
@@ -43,6 +43,8 @@ If isolation is unavailable, serialize writers in the shared checkout; read-only
 ## Develop and integrate
 
 Workers implement their bounded changes and run relevant focused checks. Store raw logs as artifacts; return the compact result contract. Root tool use should answer a cross-agent decision or unresolved ambiguity; delegate routine discovery, log reading, and test operation when a useful independent lane exists.
+
+Before accepting a worker's PASS, confirm that each required check has a receipt naming the tested candidate, command, exit code, and an accessible raw log. Read enough of the log to confirm it supports the claimed result; existence alone is insufficient. If a log is missing or incomplete, recover it or obtain the missing evidence with a focused rerun. Capture output during the original invocation, and check the saved streams before returning. Record the gap and repair rather than treating a summary as a complete receipt. Independent review should name the uncertainty it is checking before duplicating successful checks.
 
 Integrate completed lanes in dependency order through a designated integration worker with the sole write lease on the integration checkout. It may resolve merge conflicts and integration defects within the accepted contracts; new contract decisions return to the root. Review patch scope and cross-lane compatibility, then run cross-feature checks. Do not rerun successful work without a reason: changed code or dependencies, changed configuration, insufficient evidence, or conflicting findings.
 

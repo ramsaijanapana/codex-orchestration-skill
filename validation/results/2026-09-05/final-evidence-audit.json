@@ -1,0 +1,20 @@
+{
+  "normal": {
+    "exit": 0,
+    "test_output_present": true,
+    "pass_matches": true
+  },
+  "FORCE_CHILD_FAILURE diagnostic": {
+    "exit": 7,
+    "test_output_present": true,
+    "pass_matches": true
+  },
+  "SIMULATE_TEARDOWN_CRASH diagnostic": {
+    "exit": 1,
+    "test_output_present": true,
+    "pass_matches": true
+  },
+  "normal_hashes_match": true,
+  "HEAD": "364b9bda4409b2093a4487ffbafc31e302b3c654",
+  "clean": true
+}

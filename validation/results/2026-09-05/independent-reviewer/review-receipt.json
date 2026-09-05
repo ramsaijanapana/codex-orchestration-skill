@@ -1,0 +1,18 @@
+{
+  "reviewer": "independent-reviewer",
+  "candidate": "364b9bda4409b2093a4487ffbafc31e302b3c654",
+  "base": "dfd8825f362e40e44af96c4f10dd76f63fec3e81",
+  "result": "PASS",
+  "blockers": [],
+  "source_mutations": false,
+  "independence": "No implementation or integration authored; review performed read-only against frozen candidate.",
+  "canonical_gate_run": false,
+  "checks": {
+    "unit_discovery": {"exit": 0, "detail": "12 tests OK"},
+    "force_child_failure_lifecycle": {"exit": 7},
+    "teardown_crash_lifecycle": {"exit": 1},
+    "diff_check": {"exit": 0},
+    "state_probe": {"exit": 0},
+    "gate_probe": {"exit": 0}
+  }
+}

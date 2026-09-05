@@ -46,3 +46,11 @@ This is an instruction skill, not an executable scheduler or isolation system. I
 The source is a single reported experiment, not a controlled benchmark. Its parallel phase was still being integrated, so it does not establish superior final release quality or a universal speedup. Model profiles are configurable preferences. Historical token totals, pricing estimates, and quota observations are intentionally not presented as current product facts or cost promises.
 
 No source traces, account logs, or private project artifacts are included.
+
+## Validation
+
+The [live validation harness](validation/README.md) creates a deliberately broken disposable repository for an agent to repair using this skill. An independent assessor checks acceptance tests, injected verification failures, state invariants, and preservation of user work.
+
+The [evaluation report](validation/results/2026-09-05/REPORT.md) records a completed delegated run, a sequential fallback run, the evidence gaps found, and the resulting skill corrections.
+
+These checks provide bounded evidence, not a guarantee of reliability. Instruction skills cannot enforce filesystem isolation or ensure that every future model follows every instruction.

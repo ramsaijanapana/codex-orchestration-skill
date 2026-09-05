@@ -1,0 +1,95 @@
+[
+  {
+    "task": "/root/live_orchestrator/architecture_scout",
+    "role": "read-only scout",
+    "model": "gpt-5.6-luna",
+    "effort": "xhigh",
+    "fork_turns": "none",
+    "worktree": "/tmp/codex-orchestration-live-20260905/repo",
+    "owned_paths": [],
+    "read_paths": [
+      "state.py",
+      "labels.py",
+      "tests/test_state.py"
+    ],
+    "artifacts": "artifacts/orchestration/architecture-scout"
+  },
+  {
+    "task": "/root/live_orchestrator/verification_scout",
+    "role": "read-only scout",
+    "model": "gpt-5.6-luna",
+    "effort": "xhigh",
+    "fork_turns": "none",
+    "worktree": "/tmp/codex-orchestration-live-20260905/repo",
+    "owned_paths": [],
+    "read_paths": [
+      "gate.py",
+      "lifecycle_check.py",
+      "tests"
+    ],
+    "artifacts": "artifacts/orchestration/verification-scout"
+  },
+  {
+    "task": "/root/live_orchestrator/state_writer",
+    "role": "implementation",
+    "model": "gpt-5.6-luna",
+    "effort": "xhigh",
+    "fork_turns": "none",
+    "worktree": "/tmp/codex-orchestration-live-20260905/state",
+    "owned_paths": [
+      "state.py",
+      "new tests/test_state_extra.py"
+    ],
+    "read_paths": [],
+    "artifacts": "artifacts/orchestration/state-writer"
+  },
+  {
+    "task": "/root/live_orchestrator/support_writer",
+    "role": "implementation",
+    "model": "gpt-5.6-luna",
+    "effort": "xhigh",
+    "fork_turns": "none",
+    "worktree": "/tmp/codex-orchestration-live-20260905/support",
+    "owned_paths": [
+      "gate.py",
+      "labels.py",
+      "new tests/test_gate.py"
+    ],
+    "read_paths": [],
+    "artifacts": "artifacts/orchestration/support-writer"
+  },
+  {
+    "task": "/root/live_orchestrator/integration_worker",
+    "role": "sole integration author",
+    "model": "gpt-5.6-luna",
+    "effort": "high",
+    "fork_turns": "none",
+    "worktree": "/tmp/codex-orchestration-live-20260905/integration",
+    "owned_paths": [
+      "integration checkout; accepted lane commits only"
+    ],
+    "artifacts": "artifacts/orchestration/integration-worker"
+  },
+  {
+    "task": "/root/live_orchestrator/independent_reviewer",
+    "role": "independent read-only review; no authored implementation/integration",
+    "model": "gpt-5.6-luna",
+    "effort": "xhigh",
+    "fork_turns": "none",
+    "worktree": "/tmp/codex-orchestration-live-20260905/integration",
+    "owned_paths": [],
+    "candidate": "364b9bda4409b2093a4487ffbafc31e302b3c654",
+    "artifacts": "artifacts/orchestration/independent-reviewer"
+  },
+  {
+    "task": "/root/live_orchestrator/independent_verifier",
+    "role": "independent canonical verifier; distinct from reviewer and all authors",
+    "model": "gpt-5.6-luna",
+    "effort": "xhigh",
+    "fork_turns": "none",
+    "worktree": "/tmp/codex-orchestration-live-20260905/integration",
+    "owned_paths": [],
+    "candidate": "364b9bda4409b2093a4487ffbafc31e302b3c654",
+    "artifacts": "artifacts/orchestration/independent-verifier"
+  }
+]

@@ -1,0 +1,150 @@
+diff --git a/gate.py b/gate.py
+index 03707c0..3161cfe 100644
+--- a/gate.py
++++ b/gate.py
+@@ -1,6 +1,21 @@
+ import subprocess
+ import sys
+ 
+-subprocess.run([sys.executable, '-m', 'unittest', 'discover', '-s', 'tests'])
+-subprocess.run([sys.executable, 'lifecycle_check.py'])
+-print('PASS')
++
++def main():
++    checks = [
++        [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests'],
++        [sys.executable, 'lifecycle_check.py'],
++    ]
++    result_codes = []
++    for command in checks:
++        result_codes.append(subprocess.run(command).returncode)
++
++    failure = next((code for code in result_codes if code != 0), 0)
++    if failure == 0:
++        print('PASS')
++    return failure
++
++
++if __name__ == '__main__':
++    sys.exit(main())
+diff --git a/labels.py b/labels.py
+index a3d39e0..1feba9d 100644
+--- a/labels.py
++++ b/labels.py
+@@ -1,2 +1,6 @@
+ def status_label(status):
+-    return 'Published'
++    if status == 'draft':
++        return 'Draft saved'
++    if status == 'published':
++        return 'Published'
++    return 'Unknown'
+diff --git a/state.py b/state.py
+index 0dc302e..6fdec39 100644
+--- a/state.py
++++ b/state.py
+@@ -1,25 +1,37 @@
++from copy import deepcopy
+ from dataclasses import dataclass
++from uuid import uuid4
+ 
+ class Workspace:
+     def __init__(self):
++        self.identity = uuid4()
+         self.revision = 0
+         self.draft = None
+         self.published = None
+ 
+ @dataclass(frozen=True)
+ class Receipt:
++    identity: object
+     revision: int
+ 
++    @property
++    def workspace_id(self):
++        return self.identity
++
+ def save(workspace, value):
+-    workspace.draft = value
+-    workspace.published = value
++    workspace.draft = deepcopy(value)
+     workspace.revision += 1
+ 
+ def publish(workspace, role):
+-    workspace.published = workspace.draft
++    if role != 'admin':
++        raise PermissionError('admin role required to publish')
++    workspace.published = deepcopy(workspace.draft)
+ 
+ def receipt_for(workspace):
+-    return Receipt(workspace.revision)
++    return Receipt(workspace.identity, workspace.revision)
+ 
+ def receipt_valid(workspace, receipt):
+-    return receipt.revision == workspace.revision
++    return (
++        receipt.identity == workspace.identity
++        and receipt.revision == workspace.revision
++    )
+diff --git a/tests/test_gate.py b/tests/test_gate.py
+new file mode 100644
+index 0000000..042f590
+--- /dev/null
++++ b/tests/test_gate.py
+@@ -0,0 +1,56 @@
++import contextlib
++import io
++import unittest
++from unittest import mock
++
++import gate
++
++
++class GateTests(unittest.TestCase):
++    def test_pass_is_emitted_only_when_both_checks_succeed(self):
++        with mock.patch(
++            "gate.subprocess.run",
++            side_effect=[
++                mock.Mock(returncode=0),
++                mock.Mock(returncode=0),
++            ],
++        ) as run:
++            output = io.StringIO()
++            with contextlib.redirect_stdout(output):
++                result = gate.main()
++
++        self.assertEqual(result, 0)
++        self.assertEqual(run.call_count, 2)
++        self.assertEqual(output.getvalue(), "PASS\n")
++
++    def test_child_failure_propagates_after_all_checks_finish(self):
++        with mock.patch(
++            "gate.subprocess.run",
++            side_effect=[
++                mock.Mock(returncode=7),
++                mock.Mock(returncode=0),
++            ],
++        ) as run:
++            output = io.StringIO()
++            with contextlib.redirect_stdout(output):
++                result = gate.main()
++
++        self.assertEqual(result, 7)
++        self.assertEqual(run.call_count, 2)
++        self.assertEqual(output.getvalue(), "")
++
++    def test_post_assertion_failure_propagates(self):
++        with mock.patch(
++            "gate.subprocess.run",
++            side_effect=[
++                mock.Mock(returncode=0),
++                mock.Mock(returncode=1),
++            ],
++        ) as run:
++            output = io.StringIO()
++            with contextlib.redirect_stdout(output):
++                result = gate.main()
++
++        self.assertEqual(result, 1)
++        self.assertEqual(run.call_count, 2)
++        self.assertEqual(output.getvalue(), "")

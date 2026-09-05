@@ -64,14 +64,16 @@ For scouts, set the role to read-only and request findings with file locations, 
 ```text
 Outcome: PASS or BLOCKED (for this task's acceptance criteria only)
 Changed: files, revision or patch artifact; read-only if applicable
-Focused tests: commands, exit codes, revision, relevant configuration
+Focused tests: for each required check, command, exit code, tested revision,
+               relevant configuration, and accessible raw log path;
+               otherwise not run plus reason
 Invariant evidence: short findings with locations or artifact references
 Blockers: unresolved issue and the decision or evidence needed
 Cross-lane changes: contracts affected and dependent lanes; none if unchanged
 Artifacts: raw logs / receipts / patch locations
 ```
 
-Use a few bullets per field. PASS from an implementation worker is not a release certificate. Report checks that were not run explicitly, with the reason.
+Use a few bullets per field. PASS from an implementation worker is not a release certificate. A claimed check with no recoverable log needs a focused rerun before its receipt can be accepted. Report checks that were not run explicitly, with the reason.
 
 ## Verification/release packet and receipt
 

@@ -1,0 +1,90 @@
+{
+  "result": "PASS",
+  "evidence_correction": "An audit found the initially created normal.stderr artifact empty despite the captured stream. One fresh controlled normal capture was run after review acceptance; normal.stderr was rewritten with the actual 12-test/OK bytes, verified by content and SHA-256, and the corrected exit 0 is bound below.",
+  "verifier": {
+    "role": "independent canonical verifier",
+    "authorship": "did not author implementation, integration, review, or source changes",
+    "candidate_worktree": "/tmp/codex-orchestration-live-20260905/integration",
+    "artifact_directory": "/tmp/codex-orchestration-live-20260905/artifacts/orchestration/independent-verifier",
+    "release_authorized": false
+  },
+  "source": {
+    "branch": "batch-integration",
+    "revision": "364b9bda4409b2093a4487ffbafc31e302b3c654",
+    "commit_subject": "Repair gate failure propagation and status labels",
+    "git_status_after_gate": "clean",
+    "tracked_source_hashes": "captured in preflight.md; unchanged after all gate runs",
+    "source_hash_evidence": "preflight.md and final post-gate git ls-files SHA-256 capture"
+  },
+  "configuration": {
+    "python": "Python 3.14.6",
+    "executable": "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "lang": "C.UTF-8",
+    "normal_fault_inputs": "FORCE_CHILD_FAILURE and SIMULATE_TEARDOWN_CRASH explicitly absent",
+    "controls": [
+      "FORCE_CHILD_FAILURE=1 with SIMULATE_TEARDOWN_CRASH explicitly absent",
+      "SIMULATE_TEARDOWN_CRASH=1 with FORCE_CHILD_FAILURE explicitly absent"
+    ]
+  },
+  "review": {
+    "receipt": "/tmp/codex-orchestration-live-20260905/artifacts/orchestration/independent-reviewer/review-receipt.json",
+    "resolution": "PASS",
+    "binding_revision": "364b9bda4409b2093a4487ffbafc31e302b3c654",
+    "blockers": [],
+    "mutations": false,
+    "accepted_before_gate": true
+  },
+  "runs": [
+    {
+      "name": "normal",
+      "command": "env -u FORCE_CHILD_FAILURE -u SIMULATE_TEARDOWN_CRASH python3 gate.py",
+      "exit": 0,
+      "expected": "clean certificate",
+      "test_result": "12 tests passed",
+      "lifecycle_result": "Lifecycle assertions passed",
+      "pass_marker": true,
+      "stdout": "normal.stdout",
+      "stderr": "normal.stderr",
+      "controlled_capture": {
+        "command": "env -u FORCE_CHILD_FAILURE -u SIMULATE_TEARDOWN_CRASH python3 -c 'import base64,subprocess; p=subprocess.run([\"python3\",\"gate.py\"],capture_output=True); print(\"EXIT=\"+str(p.returncode)); print(\"STDOUT_B64=\"+base64.b64encode(p.stdout).decode()); print(\"STDERR_B64=\"+base64.b64encode(p.stderr).decode())'",
+        "exit": 0,
+        "stdout_sha256": "490ed58af7a3d61a7889ad84ee2b75f1f751e782cab7822654fe547c051cb5d1",
+        "stderr_sha256": "72f09eca554e87a45b7156c6109520cf15e8b6ec157dc5c033610649b49b8698",
+        "verified_saved_stderr_contains": ["Ran 12 tests", "OK"]
+      }
+    },
+    {
+      "name": "FORCE_CHILD_FAILURE diagnostic",
+      "command": "FORCE_CHILD_FAILURE=1 env -u SIMULATE_TEARDOWN_CRASH python3 gate.py",
+      "exit": 7,
+      "expected": "nonzero diagnostic control",
+      "test_result": "12 tests passed",
+      "lifecycle_result": "Assertions completed; injected child failure reported",
+      "pass_marker": false,
+      "stdout": "force-child-failure.stdout",
+      "stderr": "force-child-failure.stderr"
+    },
+    {
+      "name": "SIMULATE_TEARDOWN_CRASH diagnostic",
+      "command": "SIMULATE_TEARDOWN_CRASH=1 env -u FORCE_CHILD_FAILURE python3 gate.py",
+      "exit": 1,
+      "expected": "nonzero diagnostic control",
+      "test_result": "12 tests passed",
+      "lifecycle_result": "Assertions completed; injected post-assertion teardown crash reported",
+      "pass_marker": false,
+      "stdout": "teardown-crash.stdout",
+      "stderr": "teardown-crash.stderr"
+    }
+  ],
+  "evidence": [
+    "preflight.md",
+    "gate-runs.md",
+    "normal.stdout",
+    "normal.stderr",
+    "force-child-failure.stdout",
+    "force-child-failure.stderr",
+    "teardown-crash.stdout",
+    "teardown-crash.stderr"
+  ]
+}
