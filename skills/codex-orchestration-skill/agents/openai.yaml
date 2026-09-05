@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Orchestration"
+  short_description: "Coordinate bounded agents and independent verification"
+  default_prompt: "Use $codex-orchestration-skill to partition this engineering batch, coordinate fresh-context workers, and verify the integrated result."
